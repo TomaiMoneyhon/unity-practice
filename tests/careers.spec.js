@@ -1,7 +1,7 @@
 import { test } from "@playwright/test";
 import { CareersPage } from "../pages/careers_page";
 import { PositionPage } from "../pages/position_page";
-import {ThankYouApplyPage} from "../pages/thank_you_apply_page";
+import { ThankYouApplyPage } from "../pages/thank_you_apply_page";
 
 test("apply for automation position", async ({ page }) => {
   const careers_page = new CareersPage(page);
@@ -17,6 +17,5 @@ test("apply for automation position", async ({ page }) => {
   await position_page.submit_comeet_form();
 
   const thank_you_apply_page = new ThankYouApplyPage(page);
-  thank_you_apply_page.assert_submision_success();
-
+  await thank_you_apply_page.assert_submision_success();
 });

@@ -9,6 +9,7 @@ exports.CareersPage = class CareersPage {
     this.career_item = page.locator(".career-item");
     //TODO can you extract the class ".career-item" from this.career_item?
     this.career_link = page.locator(".career-item .fw-link");
+    this.dropdowns = page.locator(".dropdown");
   }
 
   async goto() {
@@ -20,7 +21,7 @@ exports.CareersPage = class CareersPage {
    * @param {string} option
    */
   async selectFromLocationsDropDown(option) {
-    await CareersPage.#selectFromDropdown(this.page, "Locations", option);
+    await this.selectFromDropdown("Locations", option);
   }
 
   /**
@@ -28,7 +29,7 @@ exports.CareersPage = class CareersPage {
    * @param {String} option
    */
   async selectFromTeamsDropDown(option) {
-    await CareersPage.#selectFromDropdown(this.page, "Teams", option);
+    await this.selectFromDropdown("Teams", option);
   }
 
   /**
@@ -39,24 +40,16 @@ exports.CareersPage = class CareersPage {
    * @param {string} name
    * @param {*} option
    */
-  static async #selectFromDropdown(page, name, option) {
-    const dropdown_class = "dropdown";
-    const selected_dropdown_class = "selected";
-    //TODO Why do Template literals not work?
-    await page.waitForSelector("." + dropdown_class);
-    //TODO Why do Template literals not work?
-    const dropdowns = await page.locator("." + dropdown_class);
-    const dropdowncount = await dropdowns.count();
+  async selectFromDropdown(name, option) {
+    await expect(this.dropdowns.first()).toBeVisible();
+    const dropdowncount = await this.dropdowns.count();
     for (let i = 0; i < dropdowncount; i++) {
-      var loc = await dropdowns.nth(i);
+      var loc = await this.dropdowns.nth(i);
       await expect(loc, "dropdown should be visible").toBeVisible();
       const dropdown_loc = await loc.getByText(name);
       if ((await dropdown_loc.count()) != 0) {
         await dropdown_loc.click();
-        //TODO Why do Template literals not work?
-        await expect(loc, "dropdown is not selected").toHaveClass(
-          dropdown_class + " " + selected_dropdown_class
-        );
+        await expect(loc, "dropdown is not selected").toHaveClass(/selected/);
         await expect(
           dropdown_loc.locator(".options"),
           "dropdown options are not selectable"

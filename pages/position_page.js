@@ -47,6 +47,10 @@ exports.PositionPage = class PositionPage {
     );
   }
 
+  /**
+   * @description uploads a resume to the comeet iframe form
+   * @param {String} file_path has default path of: "./test_files/" + this.comeet_form_iframe.resume_file_name
+   */
   async upload_resume_file(
     file_path = "./test_files/" + this.comeet_form_iframe.resume_file_name
   ) {
@@ -54,7 +58,7 @@ exports.PositionPage = class PositionPage {
   }
 
   /**
-   * @description clicks the submition button and waits for the transfer to a different page
+   * @description clicks the submition button in the comeet iframe and waits for the transfer to a different page
    */
   async submit_comeet_form() {
     const navigationPromise = this.page.waitForNavigation();

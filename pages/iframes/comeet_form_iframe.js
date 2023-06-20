@@ -61,9 +61,18 @@ exports.ComeetFormIframe = class ComeetFormIframe {
     ).toHaveText(this.resume_file_name);
   }
 
+  /**
+   * @description submits form aplication
+   */
   async submit_aplication() {
     await this.submit_BTN.click();
-    await expect(this.submision_error).toBeHidden();
-    await expect(this.submision_spinner).toBeHidden();
+    await expect(
+      this.submision_error,
+      "there was an error with the submision"
+    ).toBeHidden();
+    await expect(
+      this.submision_spinner,
+      "the submision got stuck loading"
+    ).toBeHidden();
   }
 };
