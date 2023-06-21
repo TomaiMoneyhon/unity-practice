@@ -1,28 +1,31 @@
-const { expect } = require('@playwright/test');
-const { MAIN_URL } = require('./page-config');
+import { expect } from "@playwright/test";
+import { MAINURL } from "./page.config";
 
- function constructor(page, sub_url) {
+exports.BasePage = class BasePage {
+  constructor(page, subURL = '') {
     this.page = page;
-    this.page_url = MAIN_URL + sub_url
-    this.getStartedLink = page.locator('a', { hasText: 'Get started' });
-    this.gettingStartedHeader = page.locator('h1', { hasText: 'Installation' });
-    this.pomLink = page.locator('li', { hasText: 'Guides' }).locator('a', { hasText: 'Page Object Model' });
-    this.tocList = page.locator('article div.markdown ul > li > a');
-  };
-
-  async function goto() {
-    await this.page.goto('https://playwright.dev');
+    this.url = MAINURL + subURL;
   }
 
-//   function get(target, name) {
+  /**
+   * @description go to this POM url
+   */
+  async goto() {
+    await this.page.goto(this.url);
+  }
 
-//     if name in target.locator_dictionary.keys():
-//         return page.locator()
-//                 '''because of lazy loading, 
-//                    seeking the element before return '''
-//                 return self.find_element(self.locator_dictionary[what])
-//         except AttributeError:
-//             super(BasePage, self).__getattribute__("method_missing")(what)
-
-//     // return `Value for attribute ${name}`
-//   }
+  /**
+   * @description fills a input with desired text.
+   * This method makes sure all previous text has been removed and asserts that the desired text was inputed
+   * TODO is this necasery? maybe the method "fill" already does this
+   * @param {import("@playwright/test").Locator} inputLoc 
+   * @param {string} text 
+   */
+  async fill(inputLoc, text) {
+    await inputLoc.press("Control+A");
+    await inputLoc.press("Delete");
+    await expect(inputLoc, "typed input is incorrect").toHaveValue('');
+    await inputLoc.fill(text);
+    await expect(inputLoc, "typed input is incorrect").toHaveValue(text);
+  }
+};

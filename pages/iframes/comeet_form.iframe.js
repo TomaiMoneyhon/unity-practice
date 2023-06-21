@@ -1,59 +1,59 @@
 import { expect } from "@playwright/test";
+import { BasePage } from "../base.page";
 
-exports.ComeetFormIframe = class ComeetFormIframe {
-  constructor(page, iframe_loc) {
+exports.ComeetFormIframe = class ComeetFormIframe extends BasePage {
+  constructor(page) {
+    super(page);
     this.resumeFileName = "sample.pdf";
 
-    this.iframe = page.frameLocator(iframe_loc);
-    this.firstNameInput = this.iframe.locator("#inputFirstName");
-    this.lastNameInput = this.iframe.locator("#inputLastName");
-    this.emailInput = this.iframe.locator("#inputEmail");
-    this.telInput = this.iframe.locator("#inputTel");
-    this.linkedinInput = this.iframe.locator("#linkedin");
-    this.noteInput = this.iframe.locator("#inputNote");
-    this.resumeInput = this.iframe.locator(
+    this.page = page;
+    this.firstNameInput = this.page.locator("#inputFirstName");
+    this.lastNameInput = this.page.locator("#inputLastName");
+    this.emailInput = this.page.locator("#inputEmail");
+    this.telInput = this.page.locator("#inputTel");
+    this.linkedinInput = this.page.locator("#linkedin");
+    this.noteInput = this.page.locator("#inputNote");
+    this.resumeInput = this.page.locator(
       "//input [contains(@class,'inputFiles')]"
     );
-    this.attachedResume = this.iframe.locator(
+    this.attachedResume = this.page.locator(
       "//div[@id = 'field-resume-aria-desc']"
     );
-    this.submitBTN = this.iframe.locator(".applyButton");
-    this.submisionError = this.iframe.locator("div .error");
-    this.submisionSpinner = this.iframe.locator(
+    this.submitBTN = this.page.locator(".applyButton");
+    this.submisionError = this.page.locator("div .error");
+    this.submisionSpinner = this.page.locator(
       "i .fa .fa-spinner .loadingIcon .icon-light"
     );
-    /**
-     * @description fills all parameters in the form
-     */
   }
 
   /**
    * @description fills all parameters in the form
+   * @param {string} name has default variable of "automation test"
+   * @param {string} email has default variable of: "test@automation.com"
+   * @param {string} tel has default variable of: "1234567890"
+   * @param {string} linkedinURL has default variable of: "https://www.linkedin.com/in/testautomation/"
+   * @param {string} note has default variable of: "AUTOMATION TEST PLEASE DISREGARD"
    */
-  async fill_form(name, email, tel, linkedin_url, note) {
-    await this.input_form(this.firstNameInput, name);
-    await this.input_form(this.lastNameInput, name);
-    await this.input_form(this.emailInput, email);
-    await this.input_form(this.telInput, tel);
-    await this.input_form(this.linkedinInput, linkedin_url);
-    await this.input_form(this.noteInput, note);
-  }
-
-  /**
-   * @description input information into a textfield of the form
-   * @param {locator} imputLoc
-   * @param {string} msg
-   */
-  async input_form(imputLoc, msg) {
-    await imputLoc.fill(msg);
-    await expect(imputLoc, "text field was incorrectly").toHaveValue(msg);
+  async fill_form(
+    name = "automation test",
+    email = "test@automation.com",
+    tel = "1234567890",
+    linkedinURL = "https://www.linkedin.com/in/testautomation/",
+    note = "AUTOMATION TEST PLEASE DISREGARD"
+  ) {
+    await this.fill(this.firstNameInput, name);
+    await this.fill(this.lastNameInput, name);
+    await this.fill(this.emailInput, email);
+    await this.fill(this.telInput, tel);
+    await this.fill(this.linkedinInput, linkedinURL);
+    await this.fill(this.noteInput, note);
   }
 
   /**
    * @description uploads a file to the 'add resume' section of the form
-   * @param {string} filePATH has a default path if none is set.
+   * @param {String} filePATH has default path of: "./test_files/" + this.resumeFileName
    */
-  async upload_resume(filePATH) {
+  async upload_resume(filePATH = "./resume-test-files/" + this.resumeFileName) {
     await this.resumeInput.setInputFiles(filePATH);
     await expect(
       this.attachedResume,

@@ -1,19 +1,15 @@
 import { expect } from "@playwright/test";
+import {BasePage} from "./base.page";
 
-exports.CareersPage = class CareersPage {
+exports.CareersPage = class CareersPage extends BasePage {
   constructor(page) {
-    this.page = page;
-    this.url = "https://www.is.com/careers";
+    super(page, "careers");
     this.searchInput = page.locator(".search-holder input");
     this.errorMsg = page.locator(".error-msg");
     this.careerItem = page.locator(".career-item");
     //TODO can you extract the class ".career-item" from this.careerItem?
     this.careerLink = page.locator(".career-item .fw-link");
     this.dropdowns = page.locator(".dropdown");
-  }
-
-  async visit() {
-    await this.page.goto(this.url);
   }
 
   /**
@@ -72,10 +68,7 @@ exports.CareersPage = class CareersPage {
    * @param {string} search
    */
   async inputSearch(search) {
-    await this.searchInput.fill(search);
-    await expect(this.searchInput, "typed input is incorrect").toHaveValue(
-      search
-    );
+    await this.fill(this.searchInput, search);
     await this.searchInput.press("Enter");
     await this.assertCareerItem();
     await expect(

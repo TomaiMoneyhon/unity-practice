@@ -5,7 +5,7 @@ import { ThankYouApplyPage } from "../pages/thank-you-apply.page";
 
 test("apply for automation position", async ({ page }) => {
   const careersPage = new CareersPage(page);
-  await careersPage.visit();
+  await careersPage.goto();
   await careersPage.selectFromLocationsDropDown("Tel Aviv");
   await careersPage.selectFromTeamsDropDown("R&D");
   await careersPage.inputSearch("automation");
