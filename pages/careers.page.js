@@ -4,15 +4,15 @@ exports.CareersPage = class CareersPage {
   constructor(page) {
     this.page = page;
     this.url = "https://www.is.com/careers";
-    this.search_input = page.locator(".search-holder input");
-    this.error_msg = page.locator(".error-msg");
-    this.career_item = page.locator(".career-item");
-    //TODO can you extract the class ".career-item" from this.career_item?
-    this.career_link = page.locator(".career-item .fw-link");
+    this.searchInput = page.locator(".search-holder input");
+    this.errorMsg = page.locator(".error-msg");
+    this.careerItem = page.locator(".career-item");
+    //TODO can you extract the class ".career-item" from this.careerItem?
+    this.careerLink = page.locator(".career-item .fw-link");
     this.dropdowns = page.locator(".dropdown");
   }
 
-  async goto() {
+  async visit() {
     await this.page.goto(this.url);
   }
 
@@ -42,24 +42,24 @@ exports.CareersPage = class CareersPage {
    */
   async selectFromDropdown(name, option) {
     await expect(this.dropdowns.first()).toBeVisible();
-    const dropdowncount = await this.dropdowns.count();
-    for (let i = 0; i < dropdowncount; i++) {
+    const dropdownCount = await this.dropdowns.count();
+    for (let i = 0; i < dropdownCount; i++) {
       var loc = await this.dropdowns.nth(i);
       await expect(loc, "dropdown should be visible").toBeVisible();
-      const dropdown_loc = await loc.getByText(name);
-      if ((await dropdown_loc.count()) != 0) {
-        await dropdown_loc.click();
+      const dropdownLoc = await loc.getByText(name);
+      if ((await dropdownLoc.count()) != 0) {
+        await dropdownLoc.click();
         await expect(loc, "dropdown is not selected").toHaveClass(/selected/);
         await expect(
-          dropdown_loc.locator(".options"),
+          dropdownLoc.locator(".options"),
           "dropdown options are not selectable"
         ).toBeVisible();
-        const selected_option = await dropdown_loc.locator("li", {
+        const selectedOption = await dropdownLoc.locator("li", {
           hasText: option,
         });
-        selected_option.click();
+        selectedOption.click();
         await expect(
-          selected_option,
+          selectedOption,
           "dropdown option was not selected"
         ).toHaveClass("active");
         return;
@@ -72,14 +72,14 @@ exports.CareersPage = class CareersPage {
    * @param {string} search
    */
   async inputSearch(search) {
-    await this.search_input.fill(search);
-    await expect(this.search_input, "typed input is incorrect").toHaveValue(
+    await this.searchInput.fill(search);
+    await expect(this.searchInput, "typed input is incorrect").toHaveValue(
       search
     );
-    await this.search_input.press("Enter");
-    await this.assert_career_item();
+    await this.searchInput.press("Enter");
+    await this.assertCareerItem();
     await expect(
-      this.career_item,
+      this.careerItem,
       "Career item search returned incorrect result"
     ).toContainText(search, { ignoreCase: true });
   }
@@ -87,21 +87,21 @@ exports.CareersPage = class CareersPage {
   /**
    * @description assert that no erorrs apear and that at least one cereer item is visible
    */
-  async assert_career_item() {
+  async assertCareerItem() {
     await expect(
-      this.error_msg,
+      this.errorMsg,
       "errror message appeared instead of cereer items"
     ).toBeHidden();
-    await expect(this.career_item, "no career items on page").toBeVisible();
+    await expect(this.careerItem, "no career items on page").toBeVisible();
   }
 
   /**
    * @description select a cereer item from the list
    */
   async selectCareerItem() {
-    await this.assert_career_item();
-    const expected_url = await this.career_link.getAttribute("href");
-    await this.career_link.first().click();
+    await this.assertCareerItem();
+    const expected_url = await this.careerLink.getAttribute("href");
+    await this.careerLink.first().click();
     await expect(this.page, "transfered to incorrect url").toHaveURL(
       "https://www.is.com" + expected_url
     );

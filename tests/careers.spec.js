@@ -1,21 +1,21 @@
 import { test } from "@playwright/test";
-import { CareersPage } from "../pages/careers_page";
-import { PositionPage } from "../pages/position_page";
-import { ThankYouApplyPage } from "../pages/thank_you_apply_page";
+import { CareersPage } from "../pages/careers.page";
+import { PositionPage } from "../pages/position.page";
+import { ThankYouApplyPage } from "../pages/thank-you-apply.page";
 
 test("apply for automation position", async ({ page }) => {
-  const careers_page = new CareersPage(page);
-  await careers_page.goto();
-  await careers_page.selectFromLocationsDropDown("Tel Aviv");
-  await careers_page.selectFromTeamsDropDown("R&D");
-  await careers_page.inputSearch("automation");
-  await careers_page.selectCareerItem();
+  const careersPage = new CareersPage(page);
+  await careersPage.visit();
+  await careersPage.selectFromLocationsDropDown("Tel Aviv");
+  await careersPage.selectFromTeamsDropDown("R&D");
+  await careersPage.inputSearch("automation");
+  await careersPage.selectCareerItem();
 
-  const position_page = new PositionPage(page);
-  await position_page.fill_comeet_form();
-  await position_page.upload_resume_file();
-  await position_page.submit_comeet_form();
+  const positionPage = new PositionPage(page);
+  await positionPage.fill_comeet_form();
+  await positionPage.upload_resume_file();
+  await positionPage.submit_comeet_form();
 
-  const thank_you_apply_page = new ThankYouApplyPage(page);
-  await thank_you_apply_page.assert_submision_success();
+  const thankYouApplyPage = new ThankYouApplyPage(page);
+  await thankYouApplyPage.assertSubmisionSuccess();
 });
