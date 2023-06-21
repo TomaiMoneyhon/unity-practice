@@ -13,12 +13,8 @@ exports.ComeetFormIframe = class ComeetFormIframe extends BasePage {
     this.telInput = this.page.locator("#inputTel");
     this.linkedinInput = this.page.locator("#linkedin");
     this.noteInput = this.page.locator("#inputNote");
-    this.resumeInput = this.page.locator(
-      "//input [contains(@class,'inputFiles')]"
-    );
-    this.attachedResume = this.page.locator(
-      "//div[@id = 'field-resume-aria-desc']"
-    );
+    this.resumeInput = this.page.locator("#cv");
+    this.attachedResume = this.page.locator("#field-resume-aria-desc");
     this.submitBTN = this.page.locator(".applyButton");
     this.submisionError = this.page.locator("div .error");
     this.submisionSpinner = this.page.locator(
