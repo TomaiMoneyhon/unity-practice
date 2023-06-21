@@ -3,7 +3,7 @@ import { CareersPage } from "../pages/careers.page";
 import { PositionPage } from "../pages/position.page";
 import { ThankYouApplyPage } from "../pages/thank-you-apply.page";
 
-test.describe('cerrer submision tests', ()=> {
+test.describe('career submision tests', ()=> {
   test("apply for automation position", async ({ page }) => {
     const careersPage = new CareersPage(page);
     await careersPage.goto();
